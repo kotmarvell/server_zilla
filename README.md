@@ -4,7 +4,7 @@ It must handle the transfer of data from the client, namely:
 - click and release the mouse buttons
 - key press and release
 
-
+License:
 - Provides copyright protection: True
 - Can be used in commercial applications: False
 - Bug fixes / extensions must be released to the public domain: False
