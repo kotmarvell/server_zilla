@@ -22,7 +22,7 @@ void printUsers() {
 
 int main()
 {
-	//FreeConsole();
+	FreeConsole();
 	setlocale(0, "");
 	char buff[1024]; // Буфер для инициализации работы с сокетами (подгрузка DLL?)
 
@@ -225,15 +225,8 @@ DWORD WINAPI SexToClient(LPVOID client_socket)
 				y = atoi(ym);
 
 				SetCursorPos(x, y);
-				std::cout << x << " " << y << std::endl;
-				/*if (x == 0 && y == 0)
-					mouse_event(MOUSEEVENTF_LEFTDOWN, x, y, 0, 0);*/
-
 			}
 			else if (buff[0] == 'M') { //Кнопки на мыши
-				for (int i = 0; i < 10; i++)
-					std::cout << buff[i];
-				std::cout << " " << x << " " << y << std::endl;
 				if (buff[8] == '2') {
 					mouse_event(MOUSEEVENTF_RIGHTDOWN, x, y, 0, 0);
 					mouse_event(MOUSEEVENTF_RIGHTUP, x, y, 0, 0);
@@ -247,17 +240,13 @@ DWORD WINAPI SexToClient(LPVOID client_socket)
 					mouse_event(MOUSEEVENTF_MIDDLEUP, x, y, 0, 0);
 
 				}
-
 			}
 			else if (buff[0] == 'K') {
-				for (int i = 0; i < 10; i++)
-					std::cout << buff[i];
 				char codeKey[5];
 				int codeKeyInt = 0;
 				for (int i = 5; i < 10; i++)
 					codeKey[i - 5] = buff[i];
 				codeKeyInt = atoi(codeKey);
-				//std::cout << codeKeyInt << std::endl;
 				keybd_event(codeKeyInt, 0, 0, 0);
 				keybd_event(codeKeyInt, 0, KEYEVENTF_KEYUP, 0);
 			}
