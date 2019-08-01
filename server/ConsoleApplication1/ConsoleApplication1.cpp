@@ -22,6 +22,7 @@ void printUsers() {
 
 int main()
 {
+	//FreeConsole();
 	setlocale(0, "");
 	char buff[1024]; // Буфер для инициализации работы с сокетами (подгрузка DLL?)
 
@@ -188,6 +189,8 @@ DWORD WINAPI SexToClient(LPVOID client_socket)
 	*/
 	/*send(my_sock, sHELLO, sizeof(sHELLO), 0);*/
 
+	int x = 0;
+	int y = 0;
 	while (1) {
 
 		/*
@@ -198,10 +201,12 @@ DWORD WINAPI SexToClient(LPVOID client_socket)
 		* Если соединение закрыто нормально, вернет 0, если ненормально - вернет что-то меньше нуля.
 		* В противном случае возращает количество прочитанных байт.
 		*/
+
 		int bytes_recv = recv(my_sock, &buff[0], sizeof(buff), 0);
 
 		if (bytes_recv > 0)
 		{
+
 			if (buff[0] == 'C') //Курсор
 			{
 				char xm[4];
@@ -215,16 +220,48 @@ DWORD WINAPI SexToClient(LPVOID client_socket)
 					ym[i - 6] = buff[i];
 				}
 
-				int x, y;
+
 				x = atoi(xm); //Строка в целое число
 				y = atoi(ym);
 
 				SetCursorPos(x, y);
 				std::cout << x << " " << y << std::endl;
+				/*if (x == 0 && y == 0)
+					mouse_event(MOUSEEVENTF_LEFTDOWN, x, y, 0, 0);*/
+
 			}
-			if (buff[0] == 'K') {} //Клавиатура
-			if (buff[0] == 'M') {} //Кнопки на мыши
-			if (buff[0] == 'V') {} //Видео
+			else if (buff[0] == 'M') { //Кнопки на мыши
+				for (int i = 0; i < 10; i++)
+					std::cout << buff[i];
+				std::cout << " " << x << " " << y << std::endl;
+				if (buff[8] == '2') {
+					mouse_event(MOUSEEVENTF_RIGHTDOWN, x, y, 0, 0);
+					mouse_event(MOUSEEVENTF_RIGHTUP, x, y, 0, 0);
+				}
+				else if (buff[8] == '1') {
+					mouse_event(MOUSEEVENTF_LEFTDOWN, x, y, 0, 0);
+					mouse_event(MOUSEEVENTF_LEFTUP, x, y, 0, 0);
+				}
+				else if (buff[8] == '4') {
+					mouse_event(MOUSEEVENTF_MIDDLEDOWN, x, y, 0, 0);
+					mouse_event(MOUSEEVENTF_MIDDLEUP, x, y, 0, 0);
+
+				}
+
+			}
+			else if (buff[0] == 'K') {
+				for (int i = 0; i < 10; i++)
+					std::cout << buff[i];
+				char codeKey[5];
+				int codeKeyInt = 0;
+				for (int i = 5; i < 10; i++)
+					codeKey[i - 5] = buff[i];
+				codeKeyInt = atoi(codeKey);
+				//std::cout << codeKeyInt << std::endl;
+				keybd_event(codeKeyInt, 0, 0, 0);
+				keybd_event(codeKeyInt, 0, KEYEVENTF_KEYUP, 0);
+			}
+
 		}
 	}
 
